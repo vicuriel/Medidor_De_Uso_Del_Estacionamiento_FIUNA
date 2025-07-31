@@ -7,3 +7,6 @@ Hernan Espinola
 Santiago Elgue
 
 Tema de proyecto: Medidor de frecuencia de uso del estacionamiento de FIUNA
+
+vamos equipo que se puede
+
