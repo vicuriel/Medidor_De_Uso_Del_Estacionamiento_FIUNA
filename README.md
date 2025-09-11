@@ -34,14 +34,3 @@ Sistema para medir la ocupación de estacionamientos: un **ESP32** con 2 sensore
 - PC con **Python 3.8+**. `tkinter` suele venir instalado por defecto en la mayoría de distribuciones.  
 - Ambos (ESP32 y PC) en la **misma red/subred** (mismo SSID).
 
----
-
-## Configuración rápida
-
-### 1) Preparar el ESP32
-- Abrir `codigoesp32.ino` y editar:
-```cpp
-const char* ssid     = "TU_SSID";
-const char* password = "TU_PASS";
-const char* HOST_PC  = "IP_DE_TU_PC"; // ej. 172.16.237.239
-const uint16_t HOST_PORT = 5000;
