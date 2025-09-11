@@ -25,7 +25,7 @@ Sistema para medir la ocupación de estacionamientos: un **ESP32** con 2 sensore
   - `"11"` → Zona ID=1, acción IN (entró)
   - `"12"` → Zona ID=1, acción OUT (salió)
   - `"101"` → Zona ID=10, acción IN (permite IDs de varios dígitos)
-- Puerto por defecto: **5000** (debe coincidir en `codigoesp32.ino` y `ui_udp_numeric.py`).
+- Puerto por defecto: **8000** (debe coincidir en `codigoesp32.ino` y `ui_udp_numeric.py`).
 
 ---
 
