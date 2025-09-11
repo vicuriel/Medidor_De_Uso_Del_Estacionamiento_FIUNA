@@ -8,7 +8,7 @@
 const char* ssid     = "FIUNA";
 const char* password = "fiuna#2024";
 const char* HOST_PC  = "172.16.237.239"; // tu IP privada
-const uint16_t HOST_PORT = 5000;
+const uint16_t HOST_PORT = 8000;
 
 const int TRIG1 = 25;
 const int ECHO1 = 26;
