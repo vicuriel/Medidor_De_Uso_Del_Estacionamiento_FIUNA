@@ -1,4 +1,4 @@
-# Medidor de Uso del Estacionamiento - PROYECTO LPV
+# Medidor de Uso del Estacionamiento de FIUNA - PROYECTO LPV
 
 **Autores:** Víctor Curiel, Ximena Quenhan, Hernán Espínola, Santiago Elgue
 
