@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio de sesión | FIUNA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <form id="loginForm" class="card" action="panel.html" method="GET" novalidate>
+      <h1>FIUNA – Iniciar sesión</h1>
+      <p class="subtitle">Acceso para estudiantes y docentes</p>
+
+      <label for="cedula">Número de cédula</label>
+      <input
+        id="cedula"
+        name="cedula"
+        type="text"
+        inputmode="numeric"
+        pattern="^[0-9\.]+$"
+        placeholder="Ej: 5.123.456"
+        required
+      />
+
+      <label for="pin">PIN</label>
+      <input
+        id="pin"
+        name="pin"
+        type="password"
+        inputmode="numeric"
+        pattern="^[0-9]{4,8}$"
+        placeholder="4 a 8 dígitos"
+        required
+      />
+
+      <button type="submit">Ingresar</button>
+      <p class="helper">¿Problemas para acceder? Contacta con Soporte TI.</p>
+    </form>
+  </main>
+
+  <script>
+    // Validación mínima en el cliente (frontal)
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', (e) => {
+      const cedula = document.getElementById('cedula').value.trim();
+      const pin = document.getElementById('pin').value.trim();
+
+      const cedulaOk = /^[0-9\.]+$/.test(cedula);
+      const pinOk = /^[0-9]{4,8}$/.test(pin);
+
+      if (!cedulaOk) {
+        e.preventDefault();
+        alert('La cédula solo debe contener números y puntos.');
+        return;
+      }
+      if (!pinOk) {
+        e.preventDefault();
+        alert('El PIN debe tener entre 4 y 8 dígitos numéricos.');
+        return;
+      }
+      // Demo estática: enviamos por GET a panel.html para mostrar saludo.
+      // Con Django, esto será POST y validación en servidor.
+    });
+  </script>
+</body>
+</html>
