@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Estacionamiento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system; }
+    body {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background:#ffffff; color:#111827;
+    }
+    .card {
+      width:100%; max-width:360px; border-radius:16px; border:1px solid #e5e7eb;
+      padding:24px; box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    }
+    .card-header { border-left:4px solid #b00020; padding-left:10px; margin-bottom:18px; }
+    .card-header h1 { font-size:1.4rem; }
+    .card-header p { font-size:0.85rem; color:#6b7280; }
+
+    label { display:block; font-size:0.85rem; margin-bottom:4px; color:#374151; }
+    .field { margin-bottom:12px; }
+
+    input[type="text"], input[type="password"] {
+      width:100%; padding:8px 10px; border-radius:999px;
+      border:1px solid #d1d5db; font-size:0.9rem;
+    }
+    input:focus { border-color:#b00020; }
+
+    .btn {
+      width:100%; padding:8px 10px; border-radius:999px; border:none;
+      background:#b00020; color:white; font-size:0.95rem; cursor:pointer;
+      margin-top:8px;
+    }
+    .btn:hover { filter:brightness(1.05); }
+
+    .error { margin-top:10px; font-size:0.8rem; color:#b00020; min-height:1em; }
+
+    .hint { margin-top:12px; font-size:0.75rem; color:#9ca3af; text-align:center; }
+    .hint span { color:#b00020; font-weight:600; }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="card-header">
+      <h1>Acceso</h1>
+      <p>Monitor de estacionamiento (ESP32)</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="user">Usuario</label>
+        <input type="text" id="user" autocomplete="off" required>
+      </div>
+
+      <div class="field">
+        <label for="pass">Contraseña</label>
+        <input type="password" id="pass" required>
+      </div>
+
+      <button type="submit" class="btn">Ingresar</button>
+
+      <div class="error" id="errorMsg"></div>
+
+      <p class="hint">
+        Usuarios válidos: <span>victor</span>, <span>santi</span>,
+        <span>hernan</span>, <span>xime</span>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    const usuariosValidos = {
+      "victor": "1234",
+      "santi": "1234",
+      "hernan": "1234",
+      "xime": "1234"
+    };
+
+    const FIREBASE_URL = "https://lpv25-c8eb7-default-rtdb.firebaseio.com";
+
+    function formatoFecha(timestamp) {
+      const d = new Date(timestamp);
+
+      const y  = d.getFullYear();
+      const m  = String(d.getMonth() + 1).padStart(2, "0");
+      const da = String(d.getDate()).padStart(2, "0");
+
+      const h  = String(d.getHours()).padStart(2, "0");
+      const mi = String(d.getMinutes()).padStart(2, "0");
+      const s  = String(d.getSeconds()).padStart(2, "0");
+
+      return `${y}-${m}-${da} ${h}:${mi}:${s}`;
+    }
+
+    // Calcula el próximo nombre: ingreso1, ingreso2, ...
+    async function obtenerSiguienteClaveIngreso() {
+      const url = `${FIREBASE_URL}/auth/logins.json`;
+
+      try {
+        const res = await fetch(url);
+        if (!res.ok) {
+          console.warn("No se pudo leer logins, usar ingreso1 por defecto");
+          return "ingreso1";
+        }
+
+        const data = await res.json();
+        if (!data) {
+          // No hay nada aún
+          return "ingreso1";
+        }
+
+        let maxN = 0;
+        for (const key of Object.keys(data)) {
+          if (key.startsWith("ingreso")) {
+            const numero = parseInt(key.replace("ingreso", ""), 10);
+            if (!isNaN(numero) && numero > maxN) {
+              maxN = numero;
+            }
+          }
+        }
+
+        const siguiente = maxN + 1;
+        return "ingreso" + siguiente;
+
+      } catch (err) {
+        console.error("Error leyendo logins:", err);
+        return "ingreso1"; // fallback
+      }
+    }
+
+    // Registrar ENTRADA en Firebase con clave ingresoN
+    async function registrarEntrada(username) {
+      const clave = await obtenerSiguienteClaveIngreso();   // p.ej. "ingreso3"
+      const url   = `${FIREBASE_URL}/auth/logins/${clave}.json`;
+
+      const data = {
+        usuario: username,
+        hora_ingreso: formatoFecha(Date.now())
+      };
+
+      console.log("Guardando en", clave, "=>", data);
+
+      await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    }
+
+    const form = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const user = document.getElementById("user").value.trim().toLowerCase();
+      const pass = document.getElementById("pass").value.trim();
+
+      if (usuariosValidos[user] === pass) {
+        errorMsg.textContent = "";
+
+        // guardamos usuario para otras páginas si hace falta
+        localStorage.setItem("usuarioActual", user);
+
+        // registra el ingreso numerado
+        await registrarEntrada(user);
+
+        // ir a selección
+        window.location.href = "seleccion.html";
+      } else {
+        errorMsg.textContent = "Usuario o contraseña incorrectos.";
+      }
+    });
+  </script>
+
+</body>
+</html>
