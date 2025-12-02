@@ -2,7 +2,7 @@
 
 **Autores:** Víctor Curiel, Ximena Quenhan, Hernán Espínola, Santiago Elgue  
 
-Sistema sencillo de conteo de autos y visualización web para medir la ocupación de distintos estacionamientos de la FIUNA usando un ESP32 y sensores ultrasónicos.
+Sistema de conteo de autos y visualización web para medir la ocupación de distintos estacionamientos de la FIUNA usando un ESP32 y sensores ultrasónicos.
 
 ---
 
