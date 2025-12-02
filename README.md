@@ -53,7 +53,7 @@ La página web está preparada para **4 lugares** (Principal, Bozzano, Yuyal y L
   - `yuyal.png`
   - `lar.png`
 
-- `esp32_parking.ino` 
+- `esp32_parking.ino/` 
   Contiene:
   - Conexión WiFi.
   - Lectura de los sensores ultrasónicos.
